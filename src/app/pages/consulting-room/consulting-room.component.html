@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <form>
+                  <label lass="form-label">Nombre del edilicio</label>
+                  <input type="text" class="form-control" name="roomName" [(ngModel)]="consultingRoom.consultingRoomName">
+                  <button class="btn btn-primary mt-3" (click)="addRoom()">Enviar</button>
+              </form>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <h2 class="mb-4" >La clinica posee los siguientes edilicios</h2>
+            <div *ngIf="consultingRooms$ | async as rooms; else loader">
+                <h4 *ngFor="let room of rooms">Edilicio "{{room.consultingRoomName}}"</h4>
+            </div>
+            <ng-template #loader>
+                Cargando edilicios...
+            </ng-template>
+        </div>
+    </div>
+</div>

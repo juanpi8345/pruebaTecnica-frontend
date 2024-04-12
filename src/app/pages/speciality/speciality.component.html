@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <form>
+                  <label lass="form-label">Nombre de la especialidad</label>
+                  <input type="text" class="form-control" name="specialityName" [(ngModel)]="speciality.name">
+                  <button class="btn btn-primary mt-3" (click)="addRoom()">Enviar</button>
+              </form>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <h2 class="mb-4" >La clinica posee las siguientes especialidades</h2>
+            <div *ngIf="specialities$ | async as specialities; else loader">
+                <h4 *ngFor="let speciality of specialities">Edilicio "{{speciality.name}}"</h4>
+            </div>
+            <ng-template #loader>
+                Cargando especialidades...
+            </ng-template>
+        </div>
+    </div>
+</div>
