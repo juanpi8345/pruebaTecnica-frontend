@@ -1,0 +1,49 @@
+<div class="container mt-5 fadeIn">
+    <div class="row">
+        <h2 class="mt-2">Agregar un paciente</h2>
+        <div class="col-md-12 mt-2">
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label lass="form-label">DNI del paciente</label>
+                        <input type="text" class="form-control" name="dni" maxlength="8"
+                        [(ngModel)]="patient.dni">
+                    </div>
+                    <div class="col-md-6">
+                        <label lass="form-label">Nombre del paciente</label>
+                        <input type="text" class="form-control" name="name"
+                        [(ngModel)]="patient.name">
+                    </div>
+                    <div class="col-md-6 mt-2">
+                        <label lass="form-label">Apellido del paciente</label>
+                        <input type="text" class="form-control" name="lastname"
+                        [(ngModel)]="patient.lastname">
+                    </div>
+                </div>
+                  <button class="btn btn-primary mt-3" (click)="addPatient()">Enviar</button>
+              </form>
+        </div>
+    </div>
+    <div class="row mt-5">
+            <h2 class="mb-4 text-center" >Pacientes registrados</h2>
+            <table class="table table-light" *ngIf="patients$ | async as patients; else loader">
+                <thead>
+                    <tr class="text-center">
+                      <th class="m-0">DNI</th>
+                      <th class="m-0">Nombre</th>
+                      <th class="m-0">Apellido</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let patient of patients" class="text-center">
+                      <td class="m-0">{{patient.dni}}</td>
+                      <td class="m-0">{{patient.name}}</td>
+                      <td class="m-0">{{patient.lastname}}</td>
+                    </tr>
+                  </tbody>
+            </table>
+            <ng-template #loader class="text-center">
+                Cargando...
+            </ng-template>
+    </div>
+</div>

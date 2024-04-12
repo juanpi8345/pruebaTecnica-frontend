@@ -23,8 +23,6 @@ export class SpecialityComponent {
     this.specialities$ = this.specialityService.getSpecialities();
   }
 
-  //No utilizo formularios reactivos ya que el formulario solo tiene un campo y
-  // no requiere de validaciones complejas
   addRoom():void{
     this.specialityService.addSpeciality(this.speciality).subscribe(response=>{
       this.specialities$ = this.specialityService.getSpecialities();

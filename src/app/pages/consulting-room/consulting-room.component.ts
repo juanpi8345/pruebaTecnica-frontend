@@ -25,8 +25,6 @@ export class ConsultingRoomComponent {
     this.consultingRooms$ = this.consultingRoomService.getConsultingRooms();
   }
 
-  //No utilizo formularios reactivos ya que el formulario solo tiene un campo y
-  // no requiere de validaciones complejas
   addRoom():void{
     this.consultingRoomService.addConsultingRoom(this.consultingRoom).subscribe(response=>{
       //Obtengo los edilicios para que se vean los cambios en tiempo real
