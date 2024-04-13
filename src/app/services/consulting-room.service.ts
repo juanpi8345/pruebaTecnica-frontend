@@ -17,6 +17,6 @@ export class ConsultingRoomService {
   }
 
   public addConsultingRoom(consultingRoom:ConsultingRoom):Observable<any>{
-    return this.http.post<ConsultingRoom>(this.apiUrl + "add",consultingRoom);
+    return this.http.post(this.apiUrl + "add",consultingRoom);
   }
 }

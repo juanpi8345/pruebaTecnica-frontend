@@ -1,7 +1,10 @@
+import { Speciality } from "./speciality";
+
 export class Professional {
     dni:string;
     name:string;
     lastname:string;
-    start;
-    end;
+    start : any;
+    end : any;
+    specialityList : Speciality[] = [];
 }

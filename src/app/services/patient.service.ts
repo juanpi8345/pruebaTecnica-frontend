@@ -18,6 +18,6 @@ export class PatientService {
 
 
   public addPatient(patient:Patient):Observable<any>{
-    return this.http.post<Patient>(this.apiUrl + "add",patient);
+    return this.http.post(this.apiUrl + "add",patient);
   }
 }

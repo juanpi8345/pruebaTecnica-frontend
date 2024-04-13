@@ -20,12 +20,12 @@
                         [(ngModel)]="patient.lastname">
                     </div>
                 </div>
-                  <button class="btn btn-primary mt-3" (click)="addPatient()">Enviar</button>
+                  <button class="btn btn-primary mt-3" (click)="addPatient()">Agregar</button>
               </form>
         </div>
     </div>
     <div class="row mt-5">
-            <h2 class="mb-4 text-center" >Pacientes registrados</h2>
+            <h2 class="mb-4 text-center" >Lista de pacientes</h2>
             <table class="table table-light" *ngIf="patients$ | async as patients; else loader">
                 <thead>
                     <tr class="text-center">

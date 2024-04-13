@@ -17,7 +17,7 @@ export class SpecialityService {
   }
 
   public addSpeciality(speciality:Speciality):Observable<any>{
-    return this.http.post<Speciality>(this.apiUrl + "add",speciality);
+    return this.http.post(this.apiUrl + "add",speciality);
   }
 }
 
