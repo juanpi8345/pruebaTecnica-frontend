@@ -8,53 +8,56 @@ asignar especialidad -->
             <form class="mt-4">
                 <div class="row">
                     <div class="col-md-4">
-                        <label lass="form-label">DNI del profesional</label>
+                        <label >DNI del profesional</label>
                         <input type="text" class="form-control" name="dni" maxlength="8" [(ngModel)]="professional.dni">
                     </div>
                     <div class="col-md-4">
-                        <label lass="form-label">Nombre del profesional</label>
+                        <label >Nombre del profesional</label>
                         <input type="text" class="form-control" name="name" [(ngModel)]="professional.name">
                     </div>
                     <div class="col-md-4">
-                        <label lass="form-label">Apellido del profesional</label>
+                        <label >Apellido del profesional</label>
                         <input type="text" class="form-control" name="lastname" [(ngModel)]="professional.lastname">
                     </div>
                     <div class="col-md-4 mt-2">
-                        <label lass="form-label">Horario de inicio</label>
+                        <label >Horario de inicio</label>
                         <input type="time" class="form-control" name="start" [(ngModel)]="professional.start">
                     </div>
                     <div class="col-md-4 mt-2">
-                        <label lass="form-label">Horario de fin</label>
+                        <label >Horario de fin</label>
                         <input type="time" class="form-control" name="end" [(ngModel)]="professional.end">
                     </div>
                 </div>
                 <button class="btn btn-primary mt-3" (click)="addProfessional()">Agregar</button>
             </form>
         </div>
-        <div class="col-md-5">
-            <h2>Asignar una especialidad</h2>
-            <form class="mt-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label lass="form-label">DNI del profesional</label>
-                        <select class="form-control" name="dni" maxlength="8"
-                        [(ngModel)]="professionalSpeciality.dni">
-                            <option option  *ngFor="let profesional of professionals"
-                            [value]="profesional.dni">{{profesional.dni}}</option>
-                        </select>
+        <!-- Si no existen profesionales o especialidades, no tendria sentido el form -->
+        @if(specialities.length > 0 && professionals.length > 0){
+            <div class="col-md-5">
+                <h2>Asignar una especialidad</h2>
+                <form class="mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label >DNI del profesional</label>
+                            <select class="form-control" name="dni" maxlength="8"
+                            [(ngModel)]="professionalSpeciality.dni">
+                                <option option  *ngFor="let profesional of professionals"
+                                [value]="profesional.dni">{{profesional.dni}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label >Nombre de la especialidad</label>
+                            <select class="form-control" name="speciality"  
+                            [(ngModel)]="professionalSpeciality.specialityName">
+                                <option  *ngFor="let speciality of specialities;"
+                                [value]="speciality.name">{{speciality.name}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label lass="form-label">Nombre de la especialidad</label>
-                        <select class="form-control" name="speciality"
-                        [(ngModel)]="professionalSpeciality.specialityName">
-                            <option  *ngFor="let speciality of specialities"
-                            [value]="speciality.name">{{speciality.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-success mt-3" (click)="addSpeciality()">Asignar</button>
-            </form>
-        </div>
+                    <button class="btn btn-success mt-3" (click)="addSpeciality()">Asignar</button>
+                </form>
+            </div>
+        }
     </div>
     <div class="row mt-5 mb-5">
         <h2 class="mb-4 text-center">Lista de profesionales</h2>
@@ -70,7 +73,7 @@ asignar especialidad -->
                 </tr>
             </thead>
             <tbody>
-                <tr class="text-center" *ngFor="let professional of professionals">
+                <tr class="text-center" *ngFor="let professional of professionals;">
                     <td class="m-0">{{professional.dni}}</td>
                     <td class="m-0">{{professional.name}}</td>
                     <td class="m-0">{{professional.lastname}}</td>

@@ -23,8 +23,8 @@ export class ProfessionalComponent {
   // No utilizo observables para hacer async en el html.
   // Voy a necesitar de esta informacion
   // Para ambos formularios
-  professionals:Professional[];
-  specialities:Speciality[];
+  professionals:Professional[] = [];
+  specialities:Speciality[] = [];
   //Profesional  crea el usuario
   professional:Professional = new Professional();
   //Dto para ingresar el dni del profesional y el nombre de la especialidad
@@ -33,8 +33,9 @@ export class ProfessionalComponent {
   ngOnInit():void{
     this.getProfessionals();
     this.getSpecialities();
+    this.professionalSpeciality.dni = this.professionals[0].dni;
+   
   }
-
   addProfessional():void{
     this.professionalService.addProfessional(this.professional).subscribe(response=>{
       //Creo una nueva instancia de profesional para evitar errores
@@ -72,12 +73,18 @@ export class ProfessionalComponent {
   getProfessionals(){
     this.professionalService.getProfessionals().subscribe((professionals:Professional[])=>{
       this.professionals = professionals;
+      //Seteo el primer dni del profesional al campo formulario para agregar especialidad
+      //Esto para que el usuario no puede enviar campos vacios
+      this.professionalSpeciality.dni = professionals[0].dni;
     },()=>{ Swal.fire("Algo salio mal","Por favor contacte con el administrador","error");})
   }
 
   getSpecialities(){
-    this.specialityService.getSpecialities().subscribe((specilities:Speciality[])=>{
-      this.specialities = specilities;
+    this.specialityService.getSpecialities().subscribe((specialities:Speciality[])=>{
+      this.specialities = specialities;
+      //Seteo el primer nombre de la especialidad al campo formulario para agregar especialidad
+      //Esto para que el usuario no puede enviar campos vacios
+      this.professionalSpeciality.specialityName = specialities[0].name;
     },()=>{ Swal.fire("Algo salio mal","Por favor contacte con el administrador","error");})
   }
 
