@@ -186,4 +186,6 @@ export class MedicalAppointmentComponent {
     });
     return medicalAppointments;
   }
+
+ 
 }
