@@ -1,0 +1,90 @@
+<div class="container fadeIn mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Agregar un turno</h2>
+            <form class="mt-4">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label >DNI del paciente</label>
+                        <select type="text" class="form-control" name="patientDni" maxlength="8"
+                        [(ngModel)]="medicalAppointment.patientDni">
+                            <option *ngFor="let patient of patients" [value]="patient.dni">
+                                {{patient.dni}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label >DNI del profesional</label>
+                        <!-- El (change) lo uso para que cuando cambien de profesional
+                        obtenga las especialidades de este mismo -->
+                        <select type="text" class="form-control" name="professionalDni" maxlength="8"
+                        (change)="getSpecialities()"
+                        [(ngModel)]="medicalAppointment.professionalDni">
+                            <option *ngFor="let professional of professionals" [value]="professional.dni">
+                                {{professional.dni}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label >Especialidad</label>
+                        <select type="text" class="form-control" name="speciality" maxlength="8"
+                        [(ngModel)]="medicalAppointment.specialityName">
+                            <option *ngFor="let speciality of professionalSpecialities" [value]="speciality.name">
+                                {{speciality.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label >Edilicio</label>
+                        <select type="text" class="form-control" name="consultingRoom" maxlength="8"
+                        [(ngModel)]="medicalAppointment.consultingRoomName">
+                            <option *ngFor="let consultingRoom of consultingRooms" [value]="consultingRoom.consultingRoomName">
+                                {{consultingRoom.consultingRoomName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <label >Fecha (lunes a sabados de 08 a 23hs)</label>
+                        <input type="datetime-local" class="form-control" name="date" 
+                        [(ngModel)]="medicalAppointment.date">
+                    </div>
+                </div>
+                <h6 class="mt-4">
+                    Las especialidades a elegir dependeran del profesional que seleccione.
+                </h6>
+                <button class="btn btn-primary mt-3" (click)="addAppointment()" >Agregar</button>
+            </form>
+        </div>
+        <h2 class="text-center">Listado de turnos</h2>
+        <table class="table table-light mt-4" >
+            <thead>
+                <tr class="text-center">
+                    <th class="m-0">DNI pac.</th>
+                    <th class="m-0">Apellido pac.</th>
+                    <th class="m-0">DNI prof.</th>
+                    <th class="m-0">Apellido prof.</th>
+                    <th class="m-0">Especialidad</th>
+                    <th class="m-0">Edilicio</th>
+                    <th class="m-0">Fecha del turno</th>
+                    <th class="m-0">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="text-center" *ngFor="let appointment of medicalAppointments">
+                    <td class="m-0">{{appointment.patientDni}}</td>
+                    <td class="m-0">{{appointment.patientLastname}}</td>
+                    <td class="m-0">{{appointment.professionalDni}}</td>
+                    <td class="m-0">{{appointment.professionalLastname}}</td>
+                    <td class="m-0">{{appointment.specialityName}}</td>
+                    <td class="m-0">{{appointment.consultingRoomName}} </td>
+                    <td class="m-0">{{appointment.date}}</td>
+                    <td class="m-0"> 
+                        <button class="btn btn-light">Modificar</button>
+                        <button class="btn btn-danger ms-2" 
+                        (click)="deleteAppointment(appointment.medicalAppointmentId)">Cancelar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
