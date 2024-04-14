@@ -23,7 +23,7 @@ import { MedicalAppointment } from '../../models/medical-appointment';
 })
 export class MedicalAppointmentComponent {
 
-  //Datepipe para formatear las fechas
+  //DatePipe para formatear las fechas
   constructor(private professionalService: ProfessionalService,
     private patientService: PatientService,
     private specialityService: SpecialityService,
@@ -42,37 +42,57 @@ export class MedicalAppointmentComponent {
   //Asi no empiezan en blanco.
   medicalAppointment: MedicalAppointmentDto = new MedicalAppointmentDto();
 
+  //Campos que voy a usar para el filtrado
+  patientDniToFilter: string;
+  professionalDniToFilter:string;
+  specialityNameToFilter : string;
+
+  //Necesito este campo porque el anterior de especialidad dependia del profesional
+  specialities:Speciality[] = [];
 
   ngOnInit(): void {
-    this.getAppointments()
+    this.getAllAppointments()
     this.getProfessionals();
     this.getPatients();
     this.getConsultingRooms();
+    this.getAllSpecialities();
   }
 
   getPatients(): void {
     this.patientService.getPatients().subscribe((patients: Patient[]) => {
       this.patients = patients;
+      //Seteos ambos campos de los forms para que no queden vacios.
       this.medicalAppointment.patientDni = patients[0].dni;
+      this.patientDniToFilter = patients[0].dni;
     })
   }
 
   getProfessionals(): void {
     this.professionalService.getProfessionals().subscribe((professionals: Professional[]) => {
       this.professionals = professionals;
+      //Seteos ambos campos de los forms para que no queden vacios.
       this.medicalAppointment.professionalDni = professionals[0].dni;
+      this.professionalDniToFilter =professionals[0].dni;
       //Una vez seteo el dni del profesional, voy a buscar con ese mismo dato sus especialidades
       //Para ofrecerlas en el campo.
-      this.getSpecialities();
+      this.getSpecialitiesByProfessional();
     })
   }
 
-  getSpecialities(): void {
+  getSpecialitiesByProfessional(): void {
     this.specialityService.getSpecialitiesByProfessional(this.medicalAppointment.professionalDni)
       .subscribe((specialities: Speciality[]) => {
         this.professionalSpecialities = specialities;
+         //Seteos ambos campos de los forms para que no queden vacios.
         this.medicalAppointment.specialityName = specialities[0].name;
+        this.specialityNameToFilter = specialities[0].name;
       })
+  }
+
+  getAllSpecialities(){
+    this.specialityService.getSpecialities().subscribe((specialities:Speciality[])=>{
+      this.specialities = specialities;
+    })
   }
 
   getConsultingRooms(): void {
@@ -82,25 +102,45 @@ export class MedicalAppointmentComponent {
     })
   }
 
-  getAppointments(): void {
+  getAllAppointments(): void {
     this.medicalAppointmentsService.getAppointments()
       .subscribe((medicalAppointments: MedicalAppointment[]) => {
-        //Antes de setear los turnos, itero cada uno,formateo la fecha y la remplazo.
-        medicalAppointments.forEach(medicalAppointment => {
-          medicalAppointment.date = this.datePipe.transform(medicalAppointment.date, 'dd-MM-yyyy HH:mm:ss');
-        });
-        this.medicalAppointments = medicalAppointments;
+        this.medicalAppointments = this.formatDates(medicalAppointments);
       })
   }
+
+  getAppointmentsByPatient():void{
+    this.medicalAppointmentsService.getAppointmentsByPatient(this.patientDniToFilter).
+                  subscribe((medicalAppointments:MedicalAppointment[])=>{
+                    //Actualizo la lista que se muestra en la tabla con sus fechas formateadas
+                    this.medicalAppointments = this.formatDates(medicalAppointments);
+    })
+  }
+
+  getAppointmentsByProfessional():void{
+    this.medicalAppointmentsService.getAppointmentsByProfessional(this.professionalDniToFilter)
+                .subscribe((medicalAppointments:MedicalAppointment[])=>{
+                   //Actualizo la lista que se muestra en la tabla con sus fechas formateadas
+                   this.medicalAppointments = this.formatDates(medicalAppointments);
+    })
+  }
+
+  getAppointmentsBySpeciality():void{
+    this.medicalAppointmentsService.getAppointmentsBySpeciality(this.specialityNameToFilter)
+                .subscribe((medicalAppointments:MedicalAppointment[])=>{
+                    //Actualizo la lista que se muestra en la tabla con sus fechas formateadas
+                   this.medicalAppointments = this.formatDates(medicalAppointments);
+                })
+  }
+
 
   addAppointment(): void {
     console.log(this.medicalAppointment)
     //Formateo la fecha para recibirla correctamente en el backend
     this.medicalAppointment.date = this.datePipe.transform(this.medicalAppointment.date, 'yyyy-MM-ddTHH:mm:ss')
     this.medicalAppointmentsService.addAppointment(this.medicalAppointment).subscribe(response => {
-      //No es lo mas recomendable...
-      //Pero es mejor que cargar la pagina de nuevo y que realice todas las otras peticiones
-      this.getAppointments();
+      //Obtengo de vuelta las citas medicas.
+      this.getAllAppointments();
       Swal.fire("Turno agregado", "El turno se agrego correctamente", "success")
     }, err => {
       Swal.fire("No se pudo otorgar", "El turno no se pudo otorgar porque la clinica esta fuera de servicio", "error")
@@ -128,5 +168,14 @@ export class MedicalAppointmentComponent {
         }, err => Swal.fire("No se pudo cancelar", "El turno no se puede cancelar porque queda 1 hora o menos para el mismo", "error"))
       }
     });
+  }
+
+  //Aux
+  //Este metodo recibe una lista de turnos, y los devuelve pero con sus fechas formateadas
+  formatDates(medicalAppointments:MedicalAppointment[]):MedicalAppointment[]{
+    medicalAppointments.forEach(medicalAppointment => {
+      medicalAppointment.date = this.datePipe.transform(medicalAppointment.date, 'dd-MM-yyyy HH:mm:ss');
+    });
+    return medicalAppointments;
   }
 }

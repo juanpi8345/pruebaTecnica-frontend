@@ -5,58 +5,112 @@
             <form class="mt-4">
                 <div class="row">
                     <div class="col-md-3">
-                        <label >DNI del paciente</label>
+                        <label>DNI del paciente</label>
                         <select type="text" class="form-control" name="patientDni" maxlength="8"
-                        [(ngModel)]="medicalAppointment.patientDni">
+                            [(ngModel)]="medicalAppointment.patientDni">
                             <option *ngFor="let patient of patients" [value]="patient.dni">
                                 {{patient.dni}}
                             </option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label >DNI del profesional</label>
+                        <label>DNI del profesional</label>
                         <!-- El (change) lo uso para que cuando cambien de profesional
                         obtenga las especialidades de este mismo -->
                         <select type="text" class="form-control" name="professionalDni" maxlength="8"
-                        (change)="getSpecialities()"
-                        [(ngModel)]="medicalAppointment.professionalDni">
+                            (change)="getSpecialitiesByProfessional()" [(ngModel)]="medicalAppointment.professionalDni">
                             <option *ngFor="let professional of professionals" [value]="professional.dni">
                                 {{professional.dni}}
                             </option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label >Especialidad</label>
+                        <label>Especialidad</label>
                         <select type="text" class="form-control" name="speciality" maxlength="8"
-                        [(ngModel)]="medicalAppointment.specialityName">
+                            [(ngModel)]="medicalAppointment.specialityName">
                             <option *ngFor="let speciality of professionalSpecialities" [value]="speciality.name">
                                 {{speciality.name}}
                             </option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label >Edilicio</label>
+                        <label>Edilicio</label>
                         <select type="text" class="form-control" name="consultingRoom" maxlength="8"
-                        [(ngModel)]="medicalAppointment.consultingRoomName">
-                            <option *ngFor="let consultingRoom of consultingRooms" [value]="consultingRoom.consultingRoomName">
+                            [(ngModel)]="medicalAppointment.consultingRoomName">
+                            <option *ngFor="let consultingRoom of consultingRooms"
+                                [value]="consultingRoom.consultingRoomName">
                                 {{consultingRoom.consultingRoomName}}
                             </option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-2">
-                        <label >Fecha (lunes a sabados de 08 a 23hs)</label>
-                        <input type="datetime-local" class="form-control" name="date" 
-                        [(ngModel)]="medicalAppointment.date">
+                        <label>Fecha (lunes a sabados de 08 a 23hs)</label>
+                        <input type="datetime-local" class="form-control" name="date"
+                            [(ngModel)]="medicalAppointment.date">
                     </div>
                 </div>
                 <h6 class="mt-4">
                     Las especialidades a elegir dependeran del profesional que seleccione.
                 </h6>
-                <button class="btn btn-primary mt-3" (click)="addAppointment()" >Agregar</button>
+                <button class="btn btn-primary mt-3" (click)="addAppointment()">Agregar</button>
             </form>
         </div>
-        <h2 class="text-center">Listado de turnos</h2>
-        <table class="table table-light mt-4" >
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Listado de turnos</h2>
+            </div>
+        </div>
+        <div  class="row mt-2 d-flex justify-content-center">
+            <button class="col btn btn-secondary"
+            (click)="getAllAppointments()">Listar todos</button>
+        </div>
+        <div class="row mt-4 d-flex justify-content-between">
+            <div class="col-md-4">
+                <form action="">
+                    <h4 class="text-center">Filtrar por especialidad</h4>
+                    <select type="text" class="form-control text-center" name="specialityName" maxlength="8"
+                        [(ngModel)]="specialityNameToFilter">
+                        <option *ngFor="let speciality of specialities" [value]="speciality.name">
+                            {{speciality.name}}
+                        </option>
+                    </select>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary mt-2" (click)="getAppointmentsBySpeciality()">Filtrar por
+                            especialidad</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form action="">
+                    <h4 class="text-center">Filtrar por profesional</h4>
+                    <select type="text" class="form-control text-center" name="professionalDni" maxlength="8"
+                        [(ngModel)]="professionalDniToFilter">
+                        <option *ngFor="let profesional of professionals" [value]="profesional.dni">
+                            {{profesional.dni}}
+                        </option>
+                    </select>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary mt-2" (click)="getAppointmentsByProfessional()">Filtrar por
+                            profesional</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form action="">
+                    <h4 class="text-center">Consultar por paciente</h4>
+                    <select type="text" class="form-control text-center" name="patientDni" maxlength="8"
+                        [(ngModel)]="patientDniToFilter">
+                        <option *ngFor="let patient of patients" [value]="patient.dni">
+                            {{patient.dni}}
+                        </option>
+                    </select>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-success mt-2" (click)="getAppointmentsByPatient()">Consultar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-light mt-5">
             <thead>
                 <tr class="text-center">
                     <th class="m-0">DNI pac.</th>
@@ -78,10 +132,10 @@
                     <td class="m-0">{{appointment.specialityName}}</td>
                     <td class="m-0">{{appointment.consultingRoomName}} </td>
                     <td class="m-0">{{appointment.date}}</td>
-                    <td class="m-0"> 
+                    <td class="m-0">
                         <button class="btn btn-light">Modificar</button>
-                        <button class="btn btn-danger ms-2" 
-                        (click)="deleteAppointment(appointment.medicalAppointmentId)">Cancelar</button>
+                        <button class="btn btn-danger ms-2"
+                            (click)="deleteAppointment(appointment.medicalAppointmentId)">Cancelar</button>
                     </td>
                 </tr>
             </tbody>
