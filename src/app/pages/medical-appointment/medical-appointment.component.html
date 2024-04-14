@@ -133,7 +133,8 @@
                     <td class="m-0">{{appointment.consultingRoomName}} </td>
                     <td class="m-0">{{appointment.date}}</td>
                     <td class="m-0">
-                        <button class="btn btn-light">Modificar</button>
+                        <button class="btn btn-light"
+                        [routerLink]="'/turnos/'+appointment.medicalAppointmentId">Modificar</button>
                         <button class="btn btn-danger ms-2"
                             (click)="deleteAppointment(appointment.medicalAppointmentId)">Cancelar</button>
                     </td>

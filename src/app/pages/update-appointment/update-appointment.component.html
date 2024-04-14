@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="mt-4">
+        <span class="text-primary"
+        routerLink="/turnos">Volver</span>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2 class="text-center">
+                Modificar turno
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <form class="mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>DNI del paciente</label>
+                    <select type="text" class="form-control" name="patientDni" maxlength="8"
+                        [(ngModel)]="medicalAppointment.patientDni">
+                        <option *ngFor="let patient of patients" [value]="patient.dni">
+                            {{patient.dni}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>DNI del profesional</label>
+                    <!-- El (change) lo uso para que cuando cambien de profesional
+                                obtenga las especialidades de este mismo -->
+                    <select type="text" class="form-control" name="professionalDni" maxlength="8"
+                        (change)="getSpecialitiesByProfessional()" [(ngModel)]="medicalAppointment.professionalDni">
+                        <option *ngFor="let professional of professionals" [value]="professional.dni">
+                            {{professional.dni}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Especialidad</label>
+                    <select type="text" class="form-control" name="speciality" 
+                        [(ngModel)]="medicalAppointment.specialityName">
+                        <option *ngFor="let speciality of professionalSpecialities" [value]="speciality.name">
+                            {{speciality.name}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label>Edilicio</label>
+                    <select type="text" class="form-control" name="consultingRoom"
+                        [(ngModel)]="medicalAppointment.consultingRoomName">
+                        <option *ngFor="let consultingRoom of consultingRooms" [value]="consultingRoom.consultingRoomName">
+                            {{consultingRoom.consultingRoomName}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label>Fecha (lunes a sabados de 08 a 23hs)</label>
+                    <input type="datetime-local" class="form-control" name="date" [(ngModel)]="medicalAppointment.date">
+                </div>
+            </div>
+            <button class="btn btn-primary mt-4" (click)="updateAppointment()">Modificar</button>
+        </form>
+    </div>
+</div>
+
+
+
+

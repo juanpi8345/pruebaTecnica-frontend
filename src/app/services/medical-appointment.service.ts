@@ -13,6 +13,10 @@ export class MedicalAppointmentService {
 
   private apiUrl: string  = "http://localhost:8080/api/appointment/"
 
+  public getAppointment(medicalAppointmentId:number):Observable<MedicalAppointment>{
+    return this.http.get<MedicalAppointment>(this.apiUrl+ "get/"+medicalAppointmentId);
+  }
+
   public getAppointments():Observable<MedicalAppointment[]>{
     return this.http.get<MedicalAppointment[]>(this.apiUrl+ "get");
   }
@@ -31,6 +35,10 @@ export class MedicalAppointmentService {
 
   public addAppointment(medicalAppointment:MedicalAppointmentDto):Observable<any>{
     return this.http.post(this.apiUrl + "add",medicalAppointment);
+  }
+
+  public updateAppointment(appointmentId:number, medicalAppointment:MedicalAppointmentDto):Observable<any>{
+    return this.http.put(this.apiUrl+"update/"+appointmentId,medicalAppointment)
   }
 
   public deleteAppointment(medicalAppointmentId:number):Observable<any>{

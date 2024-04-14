@@ -13,11 +13,12 @@ import { SpecialityService } from '../../services/speciality.service';
 import { ConsultingRoomService } from '../../services/consulting-room.service';
 import { MedicalAppointmentService } from '../../services/medical-appointment.service';
 import { MedicalAppointment } from '../../models/medical-appointment';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-medical-appointment',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,RouterLink],
   templateUrl: './medical-appointment.component.html',
   styleUrl: './medical-appointment.component.css'
 })
@@ -143,7 +144,10 @@ export class MedicalAppointmentComponent {
       this.getAllAppointments();
       Swal.fire("Turno agregado", "El turno se agrego correctamente", "success")
     }, err => {
-      Swal.fire("No se pudo otorgar", "El turno no se pudo otorgar porque la clinica esta fuera de servicio", "error")
+      if(err.status == 400)
+        Swal.fire("No se pudo otorgar", "El turno no se pudo otorgar porque el profesional no atiende a esa hora", "error")
+      else if(err.status == 406)
+        Swal.fire("No se pudo otorgar", "El turno no se pudo otorgar porque la clinica esta fuera de servicio", "error")
     })
   }
 
@@ -165,7 +169,11 @@ export class MedicalAppointmentComponent {
           this.medicalAppointments = this.medicalAppointments.filter((medicalAppointment) => {
             return medicalAppointment.medicalAppointmentId !== medicalAppointmentId;
           });
-        }, err => Swal.fire("No se pudo cancelar", "El turno no se puede cancelar porque queda 1 hora o menos para el mismo", "error"))
+        }, err => {
+          if(err.status == 400){
+            Swal.fire("No se pudo cancelar", "El turno no se puede cancelar porque queda 1 hora o menos para el mismo", "error")
+          }
+        })
       }
     });
   }
