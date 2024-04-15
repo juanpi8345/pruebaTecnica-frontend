@@ -24,6 +24,10 @@ export class SpecialityComponent {
   }
 
   addRoom():void{
+    if(this.speciality.name == undefined){
+      Swal.fire("Campos incompletos","Por favor completa los campos de manera correcta","warning");
+      return;
+    }
     this.specialityService.addSpeciality(this.speciality).subscribe(response=>{
       this.specialities$ = this.specialityService.getSpecialities();
       this.speciality.name = '';

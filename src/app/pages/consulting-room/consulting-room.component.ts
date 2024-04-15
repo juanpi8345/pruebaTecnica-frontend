@@ -26,6 +26,10 @@ export class ConsultingRoomComponent {
   }
 
   addRoom():void{
+    if(this.consultingRoom.consultingRoomName == undefined){
+      Swal.fire("Campos incompletos","Por favor completa los campos de manera correcta","warning");
+      return;
+    }
     this.consultingRoomService.addConsultingRoom(this.consultingRoom).subscribe(response=>{
       //Obtengo los edilicios para que se vean los cambios en tiempo real
       this.consultingRooms$ = this.consultingRoomService.getConsultingRooms();

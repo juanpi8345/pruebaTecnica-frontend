@@ -23,6 +23,11 @@ export class PatientComponent {
     this.patients$ = this.patientService.getPatients();
   }
   addPatient():void{
+    if(this.patient.dni == undefined || this.patient.lastname == undefined 
+      || this.patient.name == undefined){
+        Swal.fire("Campos incompletos","Por favor completa los campos de manera correcta","warning")
+        return;
+      }
     this.patientService.addPatient(this.patient).subscribe(response=>{
       this.patients$ = this.patientService.getPatients();
       this.patient.name = ''; this.patient.lastname = ''; this.patient.dni = '';

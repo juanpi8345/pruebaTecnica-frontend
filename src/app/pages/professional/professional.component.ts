@@ -37,6 +37,8 @@ export class ProfessionalComponent {
    
   }
   addProfessional():void{
+    if(!this.validateAddProfessional())
+      return;
     this.professionalService.addProfessional(this.professional).subscribe(response=>{
       //Creo una nueva instancia de profesional para evitar errores
       //Pusheo a la lista de profesionales el profesional asi se ve en tiempo real
@@ -53,7 +55,11 @@ export class ProfessionalComponent {
       this.professional.name = ''; this.professional.lastname = ''; this.professional.dni = '';
       this.professional.start = null; this.professional.end = null;
       Swal.fire("Profesional agregado","El profesional se agrego correctamente","success");
-    },()=>{ Swal.fire("Algo salio mal","Por favor contacte con el administrador","error");})
+    },err=>{
+      if(err.status == 406){
+        Swal.fire("Clinica fuera de servicio","El profesional no se agrego porque la clinica esta fuera de servicio en ese horario","error");
+      }
+    })
   }
 
   addSpeciality(){
@@ -88,4 +94,15 @@ export class ProfessionalComponent {
     },()=>{ Swal.fire("Algo salio mal","Por favor contacte con el administrador","error");})
   }
 
+  //Aux
+  //Hago otro metodo porque tiene un poco mas de complejidad
+  validateAddProfessional():boolean{
+    if(this.professional.dni == undefined || this.professional.end == undefined 
+      || this.professional.start == undefined || this.professional.name == undefined
+      || this.professional.lastname == undefined){
+        Swal.fire("Campos incompletos","Por favor completa los campos de manera correcta","warning");
+        return false;
+      }
+      return true;
+  }
 }

@@ -136,7 +136,8 @@ export class MedicalAppointmentComponent {
 
 
   addAppointment(): void {
-    console.log(this.medicalAppointment)
+    if(!this.validateAppointment())
+      return;
     //Formateo la fecha para recibirla correctamente en el backend
     this.medicalAppointment.date = this.datePipe.transform(this.medicalAppointment.date, 'yyyy-MM-ddTHH:mm:ss')
     this.medicalAppointmentsService.addAppointment(this.medicalAppointment).subscribe(response => {
@@ -185,6 +186,17 @@ export class MedicalAppointmentComponent {
       medicalAppointment.date = this.datePipe.transform(medicalAppointment.date, 'dd-MM-yyyy HH:mm:ss');
     });
     return medicalAppointments;
+  }
+
+  validateAppointment():boolean{
+    if(this.medicalAppointment.consultingRoomName == undefined ||
+      this.medicalAppointment.date == undefined || this.medicalAppointment.patientDni == undefined
+      || this.medicalAppointment.professionalDni == undefined || this.medicalAppointment.specialityName == null
+    ){
+      Swal.fire("Campos incompletos","Por favor completa los campos de manera correcta","warning");
+      return false;
+    }
+    return true;
   }
 
  
