@@ -58,6 +58,8 @@ export class ProfessionalComponent {
     },err=>{
       if(err.status == 406){
         Swal.fire("Clinica fuera de servicio","El profesional no se agrego porque la clinica esta fuera de servicio en ese horario","error");
+      }else if(err.status == 400){
+        Swal.fire("Horarios incorrectos","Por favor revisa los horarios del profesional","error");
       }
     })
   }
